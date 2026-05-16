@@ -1,0 +1,19 @@
+﻿@model RVAS_BookExchange.ViewModels.LoginViewModel
+
+<h2>Prijava</h2>
+
+<form asp-action="Login" method="post">
+    <div>
+        <label>Email</label>
+        <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+
+    <div>
+        <label>Lozinka</label>
+        <input asp-for="Password" type="password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+
+    <button type="submit">Prijavi se</button>
+</form>

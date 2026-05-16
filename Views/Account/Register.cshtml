@@ -1,0 +1,43 @@
+﻿@model RVAS_BookExchange.ViewModels.RegisterViewModel
+
+<h2>Registracija</h2>
+
+<form asp-action="Register" method="post">
+    <div>
+        <label>Email</label>
+        <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+
+    <div>
+        <label>Lozinka</label>
+        <input asp-for="Password" type="password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+
+    <div>
+        <label>Omiljeni žanrovi</label>
+
+        <div>
+            <input type="checkbox" name="FavoriteGenres" value="Roman" /> Roman
+        </div>
+
+        <div>
+            <input type="checkbox" name="FavoriteGenres" value="Fantastika" /> Fantastika
+        </div>
+
+        <div>
+            <input type="checkbox" name="FavoriteGenres" value="Triler" /> Triler
+        </div>
+
+        <div>
+            <input type="checkbox" name="FavoriteGenres" value="Drama" /> Drama
+        </div>
+
+        <div>
+            <input type="checkbox" name="FavoriteGenres" value="Naučna fantastika" /> Naučna fantastika
+        </div>
+    </div>
+
+    <button type="submit">Registruj se</button>
+</form>
