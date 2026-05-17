@@ -47,6 +47,16 @@ else
 
                 <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">Detalji</a>
             </div>
+            <a asp-controller="Books" asp-action="Edit" asp-route-id="@book.Id">
+                Izmeni
+            </a>
+
+            <form asp-controller="Books" asp-action="Delete" asp-route-id="@book.Id" method="post" style="display:inline;">
+                @Html.AntiForgeryToken()
+                <button type="submit" onclick="return confirm('Da li ste sigurni da želite da obrišete ovaj oglas?');">
+                    Obriši
+                </button>
+            </form>
         }
     </div>
 }

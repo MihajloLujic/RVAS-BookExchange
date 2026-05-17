@@ -40,4 +40,15 @@ public class BookService
             .SortByDescending(book => book.CreatedAt)
             .ToListAsync();
     }
+    public async Task UpdateAsync(string id, BookListing updatedBook)
+    {
+        updatedBook.UpdatedAt = DateTime.UtcNow;
+
+        await _books.ReplaceOneAsync(book => book.Id == id, updatedBook);
+    }
+
+    public async Task DeleteAsync(string id, string ownerUserId)
+    {
+        await _books.DeleteOneAsync(book => book.Id == id && book.OwnerUserId == ownerUserId);
+    }
 }

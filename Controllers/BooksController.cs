@@ -90,6 +90,110 @@ public class BooksController : Controller
 
         return RedirectToAction("Index");
     }
+    [Authorize]
+    [HttpGet]
+    public async Task<IActionResult> Edit(string id)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+        {
+            return BadRequest();
+        }
+
+        var book = await _bookService.GetByIdAsync(id);
+
+        if (book == null)
+        {
+            return NotFound();
+        }
+
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (book.OwnerUserId != userId)
+        {
+            return Forbid();
+        }
+
+        var model = new BookEditViewModel
+        {
+            Id = book.Id!,
+            Title = book.Title,
+            Author = book.Author,
+            Genre = book.Genre,
+            Condition = book.Condition,
+            Description = book.Description,
+            ConditionDescription = book.ConditionDescription,
+            City = book.City,
+            ExistingImagePath = book.ImagePath
+        };
+
+        return View(model);
+    }
+    [Authorize]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(BookEditViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        var existingBook = await _bookService.GetByIdAsync(model.Id);
+
+        if (existingBook == null)
+        {
+            return NotFound();
+        }
+
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (existingBook.OwnerUserId != userId)
+        {
+            return Forbid();
+        }
+
+        string? imagePath = existingBook.ImagePath;
+
+        if (model.NewImage != null && model.NewImage.Length > 0)
+        {
+            imagePath = await SaveImageAsync(model.NewImage);
+        }
+
+        existingBook.Title = model.Title;
+        existingBook.Author = model.Author;
+        existingBook.Genre = model.Genre;
+        existingBook.Condition = model.Condition;
+        existingBook.Description = model.Description;
+        existingBook.ConditionDescription = model.ConditionDescription;
+        existingBook.City = model.City;
+        existingBook.ImagePath = imagePath;
+        existingBook.UpdatedAt = DateTime.UtcNow;
+
+        await _bookService.UpdateAsync(existingBook.Id!, existingBook);
+
+        return RedirectToAction("Index", "MyListings");
+    }
+    [Authorize]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(string id)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+        {
+            return BadRequest();
+        }
+
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (userId == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        await _bookService.DeleteAsync(id, userId);
+
+        return RedirectToAction("Index", "MyListings");
+    }
 
     private async Task<string?> SaveImageAsync(IFormFile? image)
     {
