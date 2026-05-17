@@ -1,0 +1,50 @@
+﻿@model List<RVAS_BookExchange.Models.BookListing>
+
+<h2>Dostupne knjige</h2>
+
+<a asp-controller="Books" asp-action="Create">Ponudi svoju knjigu</a>
+
+@if (Model == null || !Model.Any())
+{
+    <p>Trenutno nema dostupnih knjiga.</p>
+}
+else
+{
+    <div>
+        @foreach (var book in Model)
+        {
+            <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 15px;">
+                @if (!string.IsNullOrWhiteSpace(book.ImagePath))
+                {
+                    <img src="@book.ImagePath" alt="Slika knjige" style="width: 150px; height: auto;" />
+                }
+
+                <h3>@book.Title</h3>
+
+                <p>
+                    <strong>Autor:</strong> @book.Author
+                </p>
+
+                <p>
+                    <strong>Žanr:</strong> @book.Genre
+                </p>
+
+                <p>
+                    <strong>Stanje:</strong> @book.Condition
+                </p>
+
+                <p>
+                    <strong>Grad:</strong> @book.City
+                </p>
+
+                <p>
+                    <strong>Vlasnik:</strong> @book.OwnerEmail
+                </p>
+
+                <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">
+                    Detalji
+                </a>
+            </div>
+        }
+    </div>
+}
