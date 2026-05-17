@@ -17,11 +17,40 @@ public class BooksController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string? title,string? author,string? genre,string? city,int page = 1)
     {
-        var books = await _bookService.GetAllAsync();
+        const int pageSize = 12;
 
-        return View(books);
+        if (page < 1)
+        {
+            page = 1;
+        }
+
+        var result = await _bookService.SearchAsync(
+            title,
+            author,
+            genre,
+            city,
+            page,
+            pageSize
+        );
+
+        var totalPages = (int)Math.Ceiling(result.TotalCount / (double)pageSize);
+
+        var model = new BookListViewModel
+        {
+            Books = result.Books,
+            Title = title,
+            Author = author,
+            Genre = genre,
+            City = city,
+            CurrentPage = page,
+            TotalPages = totalPages,
+            PageSize = pageSize,
+            TotalBooks = result.TotalCount
+        };
+
+        return View(model);
     }
 
     [HttpGet]

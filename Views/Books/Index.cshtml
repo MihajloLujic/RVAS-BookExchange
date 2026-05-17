@@ -1,17 +1,143 @@
-﻿@model List<RVAS_BookExchange.Models.BookListing>
+﻿@model RVAS_BookExchange.ViewModels.BookListViewModel
 
 <h2>Dostupne knjige</h2>
 
 <a asp-controller="Books" asp-action="Create">Ponudi svoju knjigu</a>
 
-@if (Model == null || !Model.Any())
+<hr />
+
+<form asp-controller="Books" asp-action="Index" method="get">
+    <div>
+        <label>Pretraga po naslovu</label>
+        <input type="text" name="title" value="@Model.Title" />
+    </div>
+
+    <div>
+        <label>Pretraga po autoru</label>
+        <input type="text" name="author" value="@Model.Author" />
+    </div>
+
+    <div>
+        <label>Žanr</label>
+        <select name="genre">
+            <option value="">Svi žanrovi</option>
+
+            @if (Model.Genre == "Roman")
+            {
+                <option value="Roman" selected>Roman</option>
+            }
+            else
+            {
+                <option value="Roman">Roman</option>
+            }
+
+            @if (Model.Genre == "Fantastika")
+            {
+                <option value="Fantastika" selected>Fantastika</option>
+            }
+            else
+            {
+                <option value="Fantastika">Fantastika</option>
+            }
+
+            @if (Model.Genre == "Triler")
+            {
+                <option value="Triler" selected>Triler</option>
+            }
+            else
+            {
+                <option value="Triler">Triler</option>
+            }
+
+            @if (Model.Genre == "Drama")
+            {
+                <option value="Drama" selected>Drama</option>
+            }
+            else
+            {
+                <option value="Drama">Drama</option>
+            }
+
+            @if (Model.Genre == "Naučna fantastika")
+            {
+                <option value="Naučna fantastika" selected>Naučna fantastika</option>
+            }
+            else
+            {
+                <option value="Naučna fantastika">Naučna fantastika</option>
+            }
+
+            @if (Model.Genre == "Biografija")
+            {
+                <option value="Biografija" selected>Biografija</option>
+            }
+            else
+            {
+                <option value="Biografija">Biografija</option>
+            }
+
+            @if (Model.Genre == "Istorija")
+            {
+                <option value="Istorija" selected>Istorija</option>
+            }
+            else
+            {
+                <option value="Istorija">Istorija</option>
+            }
+
+            @if (Model.Genre == "Psihologija")
+            {
+                <option value="Psihologija" selected>Psihologija</option>
+            }
+            else
+            {
+                <option value="Psihologija">Psihologija</option>
+            }
+
+            @if (Model.Genre == "Programiranje")
+            {
+                <option value="Programiranje" selected>Programiranje</option>
+            }
+            else
+            {
+                <option value="Programiranje">Programiranje</option>
+            }
+
+            @if (Model.Genre == "Ostalo")
+            {
+                <option value="Ostalo" selected>Ostalo</option>
+            }
+            else
+            {
+                <option value="Ostalo">Ostalo</option>
+            }
+        </select>
+    </div>
+
+    <div>
+        <label>Grad / lokacija</label>
+        <input type="text" name="city" value="@Model.City" />
+    </div>
+
+    <button type="submit">Pretraži</button>
+
+    <a asp-controller="Books" asp-action="Index">Resetuj filtere</a>
+</form>
+
+<hr />
+
+<p>
+    Ukupno pronađeno knjiga: @Model.TotalBooks
+</p>
+
+@if (Model.Books == null || !Model.Books.Any())
 {
-    <p>Trenutno nema dostupnih knjiga.</p>
+    <p>Nema knjiga koje odgovaraju pretrazi.</p>
 }
 else
 {
     <div>
-        @foreach (var book in Model)
+        @foreach (var book in Model.Books)
         {
             <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 15px;">
                 @if (!string.IsNullOrWhiteSpace(book.ImagePath))
@@ -45,6 +171,59 @@ else
                     Detalji
                 </a>
             </div>
+        }
+    </div>
+}
+
+@if (Model.TotalPages > 1)
+{
+    <div>
+        <p>Stranica @Model.CurrentPage od @Model.TotalPages</p>
+
+        @if (Model.CurrentPage > 1)
+        {
+            <a asp-controller="Books"
+               asp-action="Index"
+               asp-route-title="@Model.Title"
+               asp-route-author="@Model.Author"
+               asp-route-genre="@Model.Genre"
+               asp-route-city="@Model.City"
+               asp-route-page="@(Model.CurrentPage - 1)">
+                Prethodna
+            </a>
+        }
+
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            if (i == Model.CurrentPage)
+            {
+                <strong>@i</strong>
+            }
+            else
+            {
+                <a asp-controller="Books"
+                   asp-action="Index"
+                   asp-route-title="@Model.Title"
+                   asp-route-author="@Model.Author"
+                   asp-route-genre="@Model.Genre"
+                   asp-route-city="@Model.City"
+                   asp-route-page="@i">
+                    @i
+                </a>
+            }
+        }
+
+        @if (Model.CurrentPage < Model.TotalPages)
+        {
+            <a asp-controller="Books"
+               asp-action="Index"
+               asp-route-title="@Model.Title"
+               asp-route-author="@Model.Author"
+               asp-route-genre="@Model.Genre"
+               asp-route-city="@Model.City"
+               asp-route-page="@(Model.CurrentPage + 1)">
+                Sledeća
+            </a>
         }
     </div>
 }
