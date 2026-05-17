@@ -1,4 +1,5 @@
-﻿@model RVAS_BookExchange.Models.BookListing
+﻿@using System.Security.Claims
+@model RVAS_BookExchange.Models.BookListing
 
 <h2>Detalji knjige</h2>
 
@@ -50,5 +51,46 @@
         <strong>Poslednja izmena:</strong> @Model.UpdatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
     </p>
 </div>
+<hr />
+
+@{
+    var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
+
+@if (User.Identity != null && User.Identity.IsAuthenticated)
+{
+    if (Model.OwnerUserId != currentUserId)
+    {
+        <h3>Pošalji zahtev</h3>
+
+        <form asp-controller="Requests" asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" name="bookId" value="@Model.Id" />
+
+            <div>
+                <label>Tip zahteva</label>
+                <select name="requestType" required>
+                    <option value="">-- Izaberi tip zahteva --</option>
+                    <option value="Pozajmljivanje">Pozajmljivanje</option>
+                    <option value="Razmena">Razmena</option>
+                </select>
+            </div>
+
+            <button type="submit">Pošalji zahtev</button>
+        </form>
+    }
+    else
+    {
+        <p>Ovo je vaš oglas, ne možete poslati zahtev za sopstvenu knjigu.</p>
+    }
+}
+else
+{
+    <p>
+        Morate biti prijavljeni da biste poslali zahtev.
+        <a asp-controller="Account" asp-action="Login">Prijavite se</a>
+    </p>
+}
 
 <a asp-controller="Books" asp-action="Index">Nazad na dostupne knjige</a>
