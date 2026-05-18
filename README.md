@@ -66,7 +66,19 @@ Projekat je rađen za predmet **Razvoj veb aplikacija i servisa**.
 
 ### 1. Pokrenuti MongoDB
 
-MongoDB se pokreće ručno komandom:
+MongoDB se pokrece rucno komandom:
 
 ```bash
 "C:\Program Files\MongoDB\Server\8.0\bin\mongod.exe"
+
+### URL
+
+- ovo su url-ovi
+/Account/Register
+/Account/Login
+/Books
+/Books/Create
+/MyListings
+/Requests/Incoming
+/Requests/Sent
+/Messages
