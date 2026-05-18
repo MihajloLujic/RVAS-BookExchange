@@ -79,6 +79,17 @@
 
             <button type="submit">Pošalji zahtev</button>
         </form>
+        <hr />
+
+        <h3>Poruka vlasniku</h3>
+
+        <form asp-controller="Messages" asp-action="Start" method="post">
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" name="bookId" value="@Model.Id" />
+
+            <button type="submit">Pošalji poruku vlasniku</button>
+        </form>
     }
     else
     {
