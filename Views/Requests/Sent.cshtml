@@ -1,0 +1,49 @@
+﻿@model List<RVAS_BookExchange.Models.BookRequest>
+
+<h2>Moji poslati zahtevi</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <p>Još uvek niste poslali nijedan zahtev.</p>
+}
+else
+{
+    <div>
+        @foreach (var request in Model)
+        {
+            <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 15px;">
+                <h3>Zahtev za knjigu: @request.BookTitle</h3>
+
+                <p>
+                    <strong>Tip zahteva:</strong> @request.RequestType
+                </p>
+
+                <p>
+                    <strong>Status:</strong> @request.Status
+                </p>
+
+                <p>
+                    <strong>Datum slanja:</strong> @request.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                </p>
+
+                @if (!string.IsNullOrWhiteSpace(request.ResponseComment))
+                {
+                    <p>
+                        <strong>Komentar vlasnika:</strong>
+                        <br />
+                        @request.ResponseComment
+                    </p>
+                }
+
+                @if (request.RespondedAt != null)
+                {
+                    <p>
+                        <strong>Datum odgovora:</strong> @request.RespondedAt.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                    </p>
+                }
+            </div>
+        }
+    </div>
+}
+
+<a asp-controller="Books" asp-action="Index">Nazad na dostupne knjige</a>
