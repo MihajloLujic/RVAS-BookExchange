@@ -1,0 +1,44 @@
+﻿@model List<RVAS_BookExchange.Models.Conversation>
+
+<h2>Poruke</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <p>Trenutno nemate nijedan razgovor.</p>
+}
+else
+{
+    <div>
+        @foreach (var conversation in Model)
+        {
+            <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 15px;">
+                <h3>Razgovor za knjigu: @conversation.BookTitle</h3>
+
+                <p>
+                    <strong>Broj poruka:</strong> @conversation.Messages.Count
+                </p>
+
+                <p>
+                    <strong>Poslednja aktivnost:</strong> @conversation.UpdatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                </p>
+
+                @if (conversation.Messages.Any())
+                {
+                    var lastMessage = conversation.Messages.OrderByDescending(m => m.SentAt).First();
+
+                    <p>
+                        <strong>Poslednja poruka:</strong>
+                        <br />
+                        @lastMessage.Text
+                    </p>
+                }
+
+                <a asp-controller="Messages" asp-action="Thread" asp-route-id="@conversation.Id">
+                    Otvori razgovor
+                </a>
+            </div>
+        }
+    </div>
+}
+
+<a asp-controller="Books" asp-action="Index">Nazad na dostupne knjige</a>

@@ -1,0 +1,62 @@
+﻿@model List<RVAS_BookExchange.Models.BookListing>
+
+<h2>Moji oglasi</h2>
+
+<a asp-controller="Books" asp-action="Create">Dodaj novi oglas</a>
+
+@if (Model == null || !Model.Any())
+{
+    <p>Još uvek nemate postavljene oglase.</p>
+}
+else
+{
+    <div>
+        @foreach (var book in Model)
+        {
+            <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 15px;">
+                @if (!string.IsNullOrWhiteSpace(book.ImagePath))
+                {
+                    <img src="@book.ImagePath" alt="Slika knjige" style="width: 150px; height: auto;" />
+                }
+
+                <h3>@book.Title</h3>
+
+                <p>
+                    <strong>Autor:</strong> @book.Author
+                </p>
+
+                <p>
+                    <strong>Žanr:</strong> @book.Genre
+                </p>
+
+                <p>
+                    <strong>Stanje:</strong> @book.Condition
+                </p>
+
+                <p>
+                    <strong>Grad:</strong> @book.City
+                </p>
+
+                <p>
+                    <strong>Datum objave:</strong> @book.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                </p>
+
+                <p>
+                    <strong>Poslednja izmena:</strong> @book.UpdatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                </p>
+
+                <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">Detalji</a>
+            </div>
+            <a asp-controller="Books" asp-action="Edit" asp-route-id="@book.Id">
+                Izmeni
+            </a>
+
+            <form asp-controller="Books" asp-action="Delete" asp-route-id="@book.Id" method="post" style="display:inline;">
+                @Html.AntiForgeryToken()
+                <button type="submit" onclick="return confirm('Da li ste sigurni da želite da obrišete ovaj oglas?');">
+                    Obriši
+                </button>
+            </form>
+        }
+    </div>
+}

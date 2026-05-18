@@ -1,0 +1,80 @@
+﻿@model List<RVAS_BookExchange.Models.BookRequest>
+
+<h2>Pristigli zahtevi</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <p>Trenutno nemate pristiglih zahteva.</p>
+}
+else
+{
+    <div>
+        @foreach (var request in Model)
+        {
+            <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 15px;">
+                <h3>Zahtev za knjigu: @request.BookTitle</h3>
+
+                <p>
+                    <strong>Poslao:</strong> @request.RequesterEmail
+                </p>
+
+                <p>
+                    <strong>Tip zahteva:</strong> @request.RequestType
+                </p>
+
+                <p>
+                    <strong>Status:</strong> @request.Status
+                </p>
+
+                <p>
+                    <strong>Datum slanja:</strong> @request.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                </p>
+
+                @if (!string.IsNullOrWhiteSpace(request.ResponseComment))
+                {
+                    <p>
+                        <strong>Vaš komentar:</strong>
+                        <br />
+                        @request.ResponseComment
+                    </p>
+                }
+
+                @if (request.RespondedAt != null)
+                {
+                    <p>
+                        <strong>Datum odgovora:</strong> @request.RespondedAt.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                    </p>
+                }
+
+                @if (request.Status == "Pending")
+                {
+                    <form asp-controller="Requests" asp-action="Accept" asp-route-id="@request.Id" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <div>
+                            <label>Komentar uz prihvatanje, opciono</label>
+                            <textarea name="responseComment"></textarea>
+                        </div>
+
+                        <button type="submit">Prihvati</button>
+                    </form>
+
+                    <form asp-controller="Requests" asp-action="Reject" asp-route-id="@request.Id" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <div>
+                            <label>Komentar uz odbijanje, opciono</label>
+                            <textarea name="responseComment"></textarea>
+                        </div>
+
+                        <button type="submit">Odbij</button>
+                    </form>
+                }
+                else
+                {
+                    <p>Na ovaj zahtev ste već odgovorili.</p>
+                }
+            </div>
+        }
+    </div>
+}

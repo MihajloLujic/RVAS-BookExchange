@@ -1,0 +1,79 @@
+﻿@model RVAS_BookExchange.ViewModels.BookCreateViewModel
+
+<h2>Ponudi svoju knjigu</h2>
+
+<form asp-action="Create" asp-controller="Books" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+
+    <div>
+        <label>Naslov knjige</label>
+        <input asp-for="Title" />
+        <span asp-validation-for="Title"></span>
+    </div>
+
+    <div>
+        <label>Autor</label>
+        <input asp-for="Author" />
+        <span asp-validation-for="Author"></span>
+    </div>
+
+    <div>
+        <label>Žanr</label>
+        <select asp-for="Genre">
+            <option value="">-- Izaberi žanr --</option>
+            <option value="Roman">Roman</option>
+            <option value="Fantastika">Fantastika</option>
+            <option value="Triler">Triler</option>
+            <option value="Drama">Drama</option>
+            <option value="Naučna fantastika">Naučna fantastika</option>
+            <option value="Biografija">Biografija</option>
+            <option value="Istorija">Istorija</option>
+            <option value="Psihologija">Psihologija</option>
+            <option value="Programiranje">Programiranje</option>
+            <option value="Ostalo">Ostalo</option>
+        </select>
+        <span asp-validation-for="Genre"></span>
+    </div>
+
+    <div>
+        <label>Stanje knjige</label>
+
+        <div>
+            <input type="radio" asp-for="Condition" value="Novo" />
+            <label>Novo</label>
+        </div>
+
+        <div>
+            <input type="radio" asp-for="Condition" value="Polovno" />
+            <label>Polovno</label>
+        </div>
+
+        <span asp-validation-for="Condition"></span>
+    </div>
+
+    <div>
+        <label>Opis knjige i oglasa</label>
+        <textarea asp-for="Description"></textarea>
+        <span asp-validation-for="Description"></span>
+    </div>
+
+    <div>
+        <label>Opis stanja knjige</label>
+        <textarea asp-for="ConditionDescription"></textarea>
+        <span asp-validation-for="ConditionDescription"></span>
+    </div>
+
+    <div>
+        <label>Grad / lokacija</label>
+        <input asp-for="City" />
+        <span asp-validation-for="City"></span>
+    </div>
+
+    <div>
+        <label>Fotografija knjige</label>
+        <input asp-for="Image" type="file" />
+        <span asp-validation-for="Image"></span>
+    </div>
+
+    <button type="submit">Sačuvaj oglas</button>
+</form>
