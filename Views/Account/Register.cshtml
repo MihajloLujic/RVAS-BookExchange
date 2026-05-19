@@ -1,43 +1,61 @@
 ﻿@model RVAS_BookExchange.ViewModels.RegisterViewModel
+@{
+    ViewData["Title"] = "Registracija";
+    ViewData["HideNavbar"] = true;
+}
 
-<h2>Registracija</h2>
+<div class="auth-wrapper">
+    <div class="auth-image"></div>
 
-<form asp-action="Register" method="post">
-    <div>
-        <label>Email</label>
-        <input asp-for="Email" />
-        <span asp-validation-for="Email"></span>
+    <div class="auth-form-side">
+        <a asp-controller="Home" asp-action="Index" class="text-decoration-none mb-4 d-flex align-items-center gap-2" style="color: var(--text-dark); font-family: 'Playfair Display', serif; font-weight:700; font-size:1.3rem; align-self:flex-end;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+            </svg>
+            RafLibrary
+        </a>
+
+        <a asp-controller="Home" asp-action="Index" class="text-decoration-none mb-4" style="color: var(--text-dark); font-size:0.9rem; opacity:0.8;">
+            &#8249; Vratite se na pocetnu stranicu
+        </a>
+
+        <h1 class="auth-title mb-2">Dobrodosli!</h1>
+        <p class="mb-4" style="font-size:0.9rem;">
+            <a asp-controller="Account" asp-action="Login" style="color: var(--text-dark); font-weight:700;">Ulogujte se</a> ili napravite besplatan nalog
+        </p>
+
+        <form asp-action="Register" method="post">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly" style="display:@(ViewContext.ModelState.IsValid ? "none" : "block"); background-color:rgba(255,80,80,0.15); border-radius:10px; padding:12px 16px; color:#7a1a1a; font-size:0.9rem; margin-bottom:16px;"></div>
+
+            <div class="mb-3">
+                <label asp-for="Email" style="font-size:0.9rem;">Email</label>
+                <input asp-for="Email" class="form-control-raf mt-1" type="email" />
+                <span asp-validation-for="Email" class="field-validation-error"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Password" style="font-size:0.9rem;">Šifra</label>
+                <input asp-for="Password" class="form-control-raf mt-1" type="password" />
+                <span asp-validation-for="Password" class="field-validation-error"></span>
+            </div>
+
+            <div class="mb-4">
+                <label style="font-size:0.9rem; display:block; margin-bottom:8px;">Omiljeni žanrovi</label>
+                <div class="d-flex flex-wrap gap-2">
+                    @foreach (var zanr in new[] { "Roman", "Naučna fantastika", "Istorija", "Biografija", "Poezija", "Detektivski", "Fantazija", "Drama" })
+                    {
+                        <label style="background-color: var(--bg-input); border-radius: 20px; padding: 6px 16px; font-size:0.85rem; cursor:pointer; display:flex; align-items:center; gap:6px;">
+                            <input type="checkbox" name="FavoriteGenres" value="@zanr" style="accent-color: var(--btn-primary);" />
+                            @zanr
+                        </label>
+                    }
+                </div>
+            </div>
+
+            <button type="submit" class="btn-raf w-100 py-3" style="font-size:1rem;">Registrujte se</button>
+        </form>
     </div>
-
-    <div>
-        <label>Lozinka</label>
-        <input asp-for="Password" type="password" />
-        <span asp-validation-for="Password"></span>
-    </div>
-
-    <div>
-        <label>Omiljeni žanrovi</label>
-
-        <div>
-            <input type="checkbox" name="FavoriteGenres" value="Roman" /> Roman
-        </div>
-
-        <div>
-            <input type="checkbox" name="FavoriteGenres" value="Fantastika" /> Fantastika
-        </div>
-
-        <div>
-            <input type="checkbox" name="FavoriteGenres" value="Triler" /> Triler
-        </div>
-
-        <div>
-            <input type="checkbox" name="FavoriteGenres" value="Drama" /> Drama
-        </div>
-
-        <div>
-            <input type="checkbox" name="FavoriteGenres" value="Naučna fantastika" /> Naučna fantastika
-        </div>
-    </div>
-
-    <button type="submit">Registruj se</button>
-</form>
+</div>
