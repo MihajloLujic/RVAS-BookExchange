@@ -66,7 +66,7 @@ public class BookService
             filter &= filterBuilder.Eq(book => book.City, city);
         }
 
-        ivar totalCount = await _books.CountDocumentsAsync(filter);
+        var totalCount = await _books.CountDocumentsAsync(filter);
 
         var books = await _books
             .Find(filter)

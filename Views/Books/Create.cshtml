@@ -1,79 +1,96 @@
 ﻿@model RVAS_BookExchange.ViewModels.BookCreateViewModel
+@{
+    ViewData["Title"] = "Ponudi svoju knjigu";
+}
 
-<h2>Ponudi svoju knjigu</h2>
+<div class="container py-5 d-flex flex-column align-items-center">
+    <h1 style="font-family:'Playfair Display',serif; font-size:2.2rem; font-weight:700; color:#fff; margin-bottom:32px;">
+        Kreirajte oglas
+    </h1>
 
-<form asp-action="Create" asp-controller="Books" method="post" enctype="multipart/form-data">
-    @Html.AntiForgeryToken()
+    <div style="width:100%; max-width:520px;">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
 
-    <div>
-        <label>Naslov knjige</label>
-        <input asp-for="Title" />
-        <span asp-validation-for="Title"></span>
+            <div asp-validation-summary="ModelOnly" style="display:@(ViewContext.ModelState.IsValid ? "none" : "block"); background-color:rgba(255,80,80,0.15); border-radius:10px; padding:12px 16px; color:#7a1a1a; font-size:0.9rem; margin-bottom:16px;"></div>
+
+            <div class="mb-3">
+                <label asp-for="Title" style="font-size:0.9rem;">Naslov knjige</label>
+                <input asp-for="Title" class="form-control-raf mt-1" />
+                <span asp-validation-for="Title" class="field-validation-error"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Author" style="font-size:0.9rem;">Autor</label>
+                <input asp-for="Author" class="form-control-raf mt-1" />
+                <span asp-validation-for="Author" class="field-validation-error"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Genre" style="font-size:0.9rem;">Izaberite žanr</label>
+                <select asp-for="Genre" class="form-control-raf mt-1">
+                    <option value="">-- Odaberite žanr --</option>
+                    @foreach (var zanr in new[] { "Roman", "Naučna fantastika", "Istorija", "Biografija", "Poezija", "Detektivski", "Fantazija", "Drama" })
+                    {
+                        <option value="@zanr">@zanr</option>
+                    }
+                </select>
+                <span asp-validation-for="Genre" class="field-validation-error"></span>
+            </div>
+
+            <div class="mb-3">
+                <label style="font-size:0.9rem;">Stanje knjige</label>
+                <div class="d-flex gap-3 mt-1">
+                    <label style="flex:1; background-color:var(--bg-input); border-radius:30px; padding:12px 20px; display:flex; align-items:center; gap:10px; cursor:pointer; font-size:0.9rem;">
+                        <input type="radio" asp-for="Condition" value="Novo" style="accent-color:var(--btn-primary); width:18px; height:18px;" />
+                        Novo
+                    </label>
+                    <label style="flex:1; background-color:var(--bg-input); border-radius:30px; padding:12px 20px; display:flex; align-items:center; gap:10px; cursor:pointer; font-size:0.9rem;">
+                        <input type="radio" asp-for="Condition" value="Korišćeno" style="accent-color:var(--btn-primary); width:18px; height:18px;" />
+                        Korišćeno
+                    </label>
+                </div>
+                <span asp-validation-for="Condition" class="field-validation-error"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" style="font-size:0.9rem;">Opis knjige</label>
+                <textarea asp-for="Description" class="form-control-raf mt-1" style="border-radius:16px; min-height:80px; resize:vertical;"></textarea>
+                <span asp-validation-for="Description" class="field-validation-error"></span>
+            </div>
+
+            <div class="d-flex gap-3 mb-4">
+                <div style="flex:1;">
+                    <label asp-for="City" style="font-size:0.9rem;">Lokacija</label>
+                    <input asp-for="City" class="form-control-raf mt-1" />
+                    <span asp-validation-for="City" class="field-validation-error"></span>
+                </div>
+                <div style="flex:1;">
+                    <label style="font-size:0.9rem; display:block;">Dodajte fotografiju</label>
+                    <label style="display:flex; align-items:center; justify-content:center; gap:8px; background-color:var(--bg-input); border-radius:30px; padding:12px 20px; cursor:pointer; margin-top:4px;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="17 8 12 3 7 8" />
+                            <line x1="12" y1="3" x2="12" y2="15" />
+                        </svg>
+                        <span style="font-size:0.9rem;" id="fileLabel">Odaberi fajl</span>
+                        <input type="file" name="Image" accept="image/*" style="display:none;" onchange="updateLabel(this)" />
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-raf w-100 py-3" style="font-size:1.1rem;">
+                Kreirajte oglas
+            </button>
+        </form>
     </div>
+</div>
 
-    <div>
-        <label>Autor</label>
-        <input asp-for="Author" />
-        <span asp-validation-for="Author"></span>
-    </div>
-
-    <div>
-        <label>Žanr</label>
-        <select asp-for="Genre">
-            <option value="">-- Izaberi žanr --</option>
-            <option value="Roman">Roman</option>
-            <option value="Fantastika">Fantastika</option>
-            <option value="Triler">Triler</option>
-            <option value="Drama">Drama</option>
-            <option value="Naučna fantastika">Naučna fantastika</option>
-            <option value="Biografija">Biografija</option>
-            <option value="Istorija">Istorija</option>
-            <option value="Psihologija">Psihologija</option>
-            <option value="Programiranje">Programiranje</option>
-            <option value="Ostalo">Ostalo</option>
-        </select>
-        <span asp-validation-for="Genre"></span>
-    </div>
-
-    <div>
-        <label>Stanje knjige</label>
-
-        <div>
-            <input type="radio" asp-for="Condition" value="Novo" />
-            <label>Novo</label>
-        </div>
-
-        <div>
-            <input type="radio" asp-for="Condition" value="Polovno" />
-            <label>Polovno</label>
-        </div>
-
-        <span asp-validation-for="Condition"></span>
-    </div>
-
-    <div>
-        <label>Opis knjige i oglasa</label>
-        <textarea asp-for="Description"></textarea>
-        <span asp-validation-for="Description"></span>
-    </div>
-
-    <div>
-        <label>Opis stanja knjige</label>
-        <textarea asp-for="ConditionDescription"></textarea>
-        <span asp-validation-for="ConditionDescription"></span>
-    </div>
-
-    <div>
-        <label>Grad / lokacija</label>
-        <input asp-for="City" />
-        <span asp-validation-for="City"></span>
-    </div>
-
-    <div>
-        <label>Fotografija knjige</label>
-        <input asp-for="Image" type="file" />
-        <span asp-validation-for="Image"></span>
-    </div>
-
-    <button type="submit">Sačuvaj oglas</button>
-</form>
+@section Scripts {
+    <script>
+        function updateLabel(input) {
+            const label = document.getElementById('fileLabel');
+            label.textContent = input.files[0] ? input.files[0].name : 'Odaberi fajl';
+        }
+    </script>
+}
