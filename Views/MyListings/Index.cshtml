@@ -1,62 +1,71 @@
 ﻿@model List<RVAS_BookExchange.Models.BookListing>
-
-<h2>Moji oglasi</h2>
-
-<a asp-controller="Books" asp-action="Create">Dodaj novi oglas</a>
-
-@if (Model == null || !Model.Any())
-{
-    <p>Još uvek nemate postavljene oglase.</p>
+@{
+    ViewData["Title"] = "Moji oglasi";
 }
-else
-{
-    <div>
-        @foreach (var book in Model)
-        {
-            <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 15px;">
-                @if (!string.IsNullOrWhiteSpace(book.ImagePath))
-                {
-                    <img src="@book.ImagePath" alt="Slika knjige" style="width: 150px; height: auto;" />
-                }
 
-                <h3>@book.Title</h3>
-
-                <p>
-                    <strong>Autor:</strong> @book.Author
-                </p>
-
-                <p>
-                    <strong>Žanr:</strong> @book.Genre
-                </p>
-
-                <p>
-                    <strong>Stanje:</strong> @book.Condition
-                </p>
-
-                <p>
-                    <strong>Grad:</strong> @book.City
-                </p>
-
-                <p>
-                    <strong>Datum objave:</strong> @book.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
-                </p>
-
-                <p>
-                    <strong>Poslednja izmena:</strong> @book.UpdatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
-                </p>
-
-                <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">Detalji</a>
-            </div>
-            <a asp-controller="Books" asp-action="Edit" asp-route-id="@book.Id">
-                Izmeni
-            </a>
-
-            <form asp-controller="Books" asp-action="Delete" asp-route-id="@book.Id" method="post" style="display:inline;">
-                @Html.AntiForgeryToken()
-                <button type="submit" onclick="return confirm('Da li ste sigurni da želite da obrišete ovaj oglas?');">
-                    Obriši
-                </button>
-            </form>
-        }
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 style="font-family:'Playfair Display',serif;">Moji oglasi</h2>
+        <a asp-controller="Books" asp-action="Create" class="btn-raf">Dodaj novi oglas</a>
     </div>
-}
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5">
+            <p style="font-size:1.1rem; opacity:0.7;">Nemate još nijedan oglas.</p>
+            <a asp-controller="Books" asp-action="Create" class="btn-raf mt-3">Kreirajte prvi oglas</a>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-raf">
+                <thead>
+                    <tr>
+                        <th>Slika</th>
+                        <th>Naslov</th>
+                        <th>Autor</th>
+                        <th>Žanr</th>
+                        <th>Grad</th>
+                        <th>Stanje</th>
+                        <th>Akcije</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var knjiga in Model)
+                    {
+                        <tr>
+                            <td>
+                                @if (!string.IsNullOrEmpty(knjiga.ImagePath))
+                                {
+                                    <img src="@knjiga.ImagePath" style="width:50px; height:60px; object-fit:cover; border-radius:6px;" />
+                                }
+                                else
+                                {
+                                    <div style="width:50px; height:60px; background-color:var(--bg-input); border-radius:6px; display:flex; align-items:center; justify-content:center;">📚</div>
+                                }
+                            </td>
+                            <td><strong>@knjiga.Title</strong></td>
+                            <td>@knjiga.Author</td>
+                            <td>@knjiga.Genre</td>
+                            <td>@knjiga.City</td>
+                            <td>@knjiga.Condition</td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <a asp-controller="Books" asp-action="Edit" asp-route-id="@knjiga.Id" class="btn-raf" style="font-size:0.8rem; padding:6px 14px;">Izmeni</a>
+                                    <form method="post" asp-controller="Books" asp-action="Delete" style="margin:0;">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@knjiga.Id" />
+                                        <button type="submit" style="background-color:#8b2020; color:#fff; border:none; border-radius:30px; padding:6px 14px; font-size:0.8rem; font-weight:700; cursor:pointer;" onclick="return confirm('Da li ste sigurni?')">
+                                            Obriši
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

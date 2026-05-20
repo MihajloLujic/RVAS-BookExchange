@@ -1,8 +1,47 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Početna";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div style="position: relative; height: 500px; overflow: hidden;">
+    <img src="https://images.unsplash.com/photo-1568667256549-094345857637?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bGlicmFyeXxlbnwwfHwwfHx8MA%3D%3D"
+         alt="Biblioteka" 
+         style="width:100%; height:100%; object-fit:cover;" />
+    <div style="position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.35);"></div>
+    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; color:#fff;">
+        <h1 style="font-family:'Playfair Display',serif; font-size:3rem; font-weight:700; margin-bottom:16px;">
+            Dobrodošli u RafLibrary!
+        </h1>
+        <p style="font-size:1.2rem; margin-bottom:32px; opacity:0.9;">
+            Pronađite, podelite i razmenite knjige sa drugima.
+        </p>
+        <a asp-controller="Books" asp-action="Index" class="btn-raf" style="font-size:1rem; padding:14px 36px;">
+            Pregledaj knjige
+        </a>
+    </div>
+</div>
+
+<div class="container py-5 text-center">
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div style="background-color:var(--bg-input); border-radius:16px; padding:32px 24px;">
+                <div style="font-size:2.5rem; margin-bottom:12px;">📚</div>
+                <h5 style="font-weight:700; margin-bottom:8px;">Pronađi knjigu</h5>
+                <p style="font-size:0.9rem; opacity:0.8;">Pretraži hiljade dostupnih knjiga po naslovu, autoru, žanru ili gradu.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div style="background-color:var(--bg-input); border-radius:16px; padding:32px 24px;">
+                <div style="font-size:2.5rem; margin-bottom:12px;">🤝</div>
+                <h5 style="font-weight:700; margin-bottom:8px;">Razmeni</h5>
+                <p style="font-size:0.9rem; opacity:0.8;">Ponudi svoje knjige drugima i dogovorite razmenu direktno kroz poruke.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div style="background-color:var(--bg-input); border-radius:16px; padding:32px 24px;">
+                <div style="font-size:2.5rem; margin-bottom:12px;">💬</div>
+                <h5 style="font-weight:700; margin-bottom:8px;">Povežite se</h5>
+                <p style="font-size:0.9rem; opacity:0.8;">Komunicirajte sa vlasnicima knjiga i dogovorite detalje razmene.</p>
+            </div>
+        </div>
+    </div>
 </div>

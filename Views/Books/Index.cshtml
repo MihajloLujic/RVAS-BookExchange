@@ -1,229 +1,93 @@
 ﻿@model RVAS_BookExchange.ViewModels.BookListViewModel
-
-<h2>Dostupne knjige</h2>
-
-<a asp-controller="Books" asp-action="Create">Ponudi svoju knjigu</a>
-
-<hr />
-
-<form asp-controller="Books" asp-action="Index" method="get">
-    <div>
-        <label>Pretraga po naslovu</label>
-        <input type="text" name="title" value="@Model.Title" />
-    </div>
-
-    <div>
-        <label>Pretraga po autoru</label>
-        <input type="text" name="author" value="@Model.Author" />
-    </div>
-
-    <div>
-        <label>Žanr</label>
-        <select name="genre">
-            <option value="">Svi žanrovi</option>
-
-            @if (Model.Genre == "Roman")
-            {
-                <option value="Roman" selected>Roman</option>
-            }
-            else
-            {
-                <option value="Roman">Roman</option>
-            }
-
-            @if (Model.Genre == "Fantastika")
-            {
-                <option value="Fantastika" selected>Fantastika</option>
-            }
-            else
-            {
-                <option value="Fantastika">Fantastika</option>
-            }
-
-            @if (Model.Genre == "Triler")
-            {
-                <option value="Triler" selected>Triler</option>
-            }
-            else
-            {
-                <option value="Triler">Triler</option>
-            }
-
-            @if (Model.Genre == "Drama")
-            {
-                <option value="Drama" selected>Drama</option>
-            }
-            else
-            {
-                <option value="Drama">Drama</option>
-            }
-
-            @if (Model.Genre == "Naučna fantastika")
-            {
-                <option value="Naučna fantastika" selected>Naučna fantastika</option>
-            }
-            else
-            {
-                <option value="Naučna fantastika">Naučna fantastika</option>
-            }
-
-            @if (Model.Genre == "Biografija")
-            {
-                <option value="Biografija" selected>Biografija</option>
-            }
-            else
-            {
-                <option value="Biografija">Biografija</option>
-            }
-
-            @if (Model.Genre == "Istorija")
-            {
-                <option value="Istorija" selected>Istorija</option>
-            }
-            else
-            {
-                <option value="Istorija">Istorija</option>
-            }
-
-            @if (Model.Genre == "Psihologija")
-            {
-                <option value="Psihologija" selected>Psihologija</option>
-            }
-            else
-            {
-                <option value="Psihologija">Psihologija</option>
-            }
-
-            @if (Model.Genre == "Programiranje")
-            {
-                <option value="Programiranje" selected>Programiranje</option>
-            }
-            else
-            {
-                <option value="Programiranje">Programiranje</option>
-            }
-
-            @if (Model.Genre == "Ostalo")
-            {
-                <option value="Ostalo" selected>Ostalo</option>
-            }
-            else
-            {
-                <option value="Ostalo">Ostalo</option>
-            }
-        </select>
-    </div>
-
-    <div>
-        <label>Grad / lokacija</label>
-        <input type="text" name="city" value="@Model.City" />
-    </div>
-
-    <button type="submit">Pretraži</button>
-
-    <a asp-controller="Books" asp-action="Index">Resetuj filtere</a>
-</form>
-
-<hr />
-
-<p>
-    Ukupno pronađeno knjiga: @Model.TotalBooks
-</p>
-
-@if (Model.Books == null || !Model.Books.Any())
-{
-    <p>Nema knjiga koje odgovaraju pretrazi.</p>
-}
-else
-{
-    <div>
-        @foreach (var book in Model.Books)
-        {
-            <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 15px;">
-                @if (!string.IsNullOrWhiteSpace(book.ImagePath))
-                {
-                    <img src="@book.ImagePath" alt="Slika knjige" style="width: 150px; height: auto;" />
-                }
-
-                <h3>@book.Title</h3>
-
-                <p>
-                    <strong>Autor:</strong> @book.Author
-                </p>
-
-                <p>
-                    <strong>Žanr:</strong> @book.Genre
-                </p>
-
-                <p>
-                    <strong>Stanje:</strong> @book.Condition
-                </p>
-
-                <p>
-                    <strong>Grad:</strong> @book.City
-                </p>
-
-                <p>
-                    <strong>Vlasnik:</strong> @book.OwnerEmail
-                </p>
-
-                <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">
-                    Detalji
-                </a>
-            </div>
-        }
-    </div>
+@{
+    ViewData["Title"] = "Dostupne knjige";
 }
 
-@if (Model.TotalPages > 1)
-{
-    <div>
-        <p>Stranica @Model.CurrentPage od @Model.TotalPages</p>
+<div class="container-fluid px-4 py-4">
+    <h2 class="mb-4" style="font-family: 'Playfair Display', serif;">Dostupne knjige</h2>
 
-        @if (Model.CurrentPage > 1)
-        {
-            <a asp-controller="Books"
-               asp-action="Index"
-               asp-route-title="@Model.Title"
-               asp-route-author="@Model.Author"
-               asp-route-genre="@Model.Genre"
-               asp-route-city="@Model.City"
-               asp-route-page="@(Model.CurrentPage - 1)">
-                Prethodna
-            </a>
-        }
-
-        @for (int i = 1; i <= Model.TotalPages; i++)
-        {
-            if (i == Model.CurrentPage)
-            {
-                <strong>@i</strong>
-            }
-            else
-            {
-                <a asp-controller="Books"
-                   asp-action="Index"
-                   asp-route-title="@Model.Title"
-                   asp-route-author="@Model.Author"
-                   asp-route-genre="@Model.Genre"
-                   asp-route-city="@Model.City"
-                   asp-route-page="@i">
-                    @i
-                </a>
-            }
-        }
-
-        @if (Model.CurrentPage < Model.TotalPages)
-        {
-            <a asp-controller="Books"
-               asp-action="Index"
-               asp-route-title="@Model.Title"
-               asp-route-author="@Model.Author"
-               asp-route-genre="@Model.Genre"
-               asp-route-city="@Model.City"
-               asp-route-page="@(Model.CurrentPage + 1)">
-                Sledeća
-            </a>
-        }
+    <div class="row mb-4">
+        <div class="col-12">
+            <form method="get" asp-action="Index" class="d-flex flex-wrap gap-2">
+                <input name="title" value="@Model.Title" placeholder="Naslov..." class="form-control-raf" style="width:200px;" />
+                <input name="author" value="@Model.Author" placeholder="Autor..." class="form-control-raf" style="width:200px;" />
+                <select name="genre" class="form-control-raf" style="width:180px;">
+                    <option value="">Svi žanrovi</option>
+                    @foreach (var zanr in new[] { "Roman", "Naučna fantastika", "Istorija", "Biografija", "Poezija", "Detektivski", "Fantazija", "Drama" })
+                    {
+                        <option value="@zanr" selected="@(Model.Genre == zanr)">@zanr</option>
+                    }
+                </select>
+                <input name="city" value="@Model.City" placeholder="Grad..." class="form-control-raf" style="width:160px;" />
+                <button type="submit" class="btn-raf">Pretraži</button>
+                <a asp-action="Index" class="btn-raf-outline">Resetuj</a>
+            </form>
+        </div>
     </div>
-}
+
+    @if (!Model.Books.Any())
+    {
+        <div class="text-center py-5">
+            <p style="font-size:1.1rem; opacity:0.7;">Nema knjiga za prikaz.</p>
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-3">
+            @foreach (var knjiga in Model.Books)
+            {
+                <div class="col">
+                    <div class="book-card">
+                        @if (!string.IsNullOrEmpty(knjiga.ImagePath))
+                        {
+                            <img src="@knjiga.ImagePath" alt="@knjiga.Title" />
+                        }
+                        else
+                        {
+                            <div class="no-image">📚</div>
+                        }
+                        <div class="book-title">@knjiga.Title</div>
+                        <div class="book-author">@knjiga.Author</div>
+                        <div class="book-owner">Vlasnik: @knjiga.OwnerEmail</div>
+                        <a asp-action="Details" asp-route-id="@knjiga.Id" class="btn-raf mt-2" style="font-size:0.85rem; padding: 7px 18px;">Detalji</a>
+                    </div>
+                </div>
+            }
+        </div>
+
+        @if (Model.TotalPages > 1)
+        {
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    @if (Model.CurrentPage > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(Model.CurrentPage - 1)" asp-route-title="@Model.Title" asp-route-author="@Model.Author" asp-route-genre="@Model.Genre" asp-route-city="@Model.City">&#8249;</a>
+                        </li>
+                    }
+
+                    @for (int i = 1; i <= Model.TotalPages; i++)
+                    {
+                        if (i <= 4 || i > Model.TotalPages - 2 || Math.Abs(i - Model.CurrentPage) <= 1)
+                        {
+                            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-title="@Model.Title" asp-route-author="@Model.Author" asp-route-genre="@Model.Genre" asp-route-city="@Model.City">@i</a>
+                            </li>
+                        }
+                        else if (i == 5 || i == Model.TotalPages - 2)
+                        {
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        }
+                    }
+
+                    @if (Model.CurrentPage < Model.TotalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(Model.CurrentPage + 1)" asp-route-title="@Model.Title" asp-route-author="@Model.Author" asp-route-genre="@Model.Genre" asp-route-city="@Model.City">&#8250;</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+    }
+</div>
