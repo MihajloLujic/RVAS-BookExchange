@@ -25,9 +25,18 @@
             {
                 <form asp-controller="Requests" asp-action="Create" method="post" class="mt-3">
                     @Html.AntiForgeryToken()
-                    <input type="hidden" name="bookListingId" value="@Model.Id" />
+                    <input type="hidden" name="bookId" value="@Model.Id" />
+                    <input type="hidden" name="requestType" value="Pozajmica" />
                     <button type="submit" style="width:100%; background-color:var(--bg-input); border:none; border-radius:30px; padding:14px 24px; font-weight:700; font-size:0.95rem; cursor:pointer;">
-                        Pozajmi / razmijeni knjigu
+                        Pozajmi / razmeni knjigu
+                    </button>
+                </form>
+
+                <form asp-controller="Messages" asp-action="Start" method="post" class="mt-2">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="bookId" value="@Model.Id" />
+                    <button type="submit" style="width:100%; background-color:var(--btn-primary); color:#fff; border:none; border-radius:30px; padding:14px 24px; font-weight:700; font-size:0.95rem; cursor:pointer;">
+                        Pošalji poruku
                     </button>
                 </form>
             }

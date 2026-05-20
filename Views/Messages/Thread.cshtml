@@ -1,51 +1,41 @@
 ﻿@using System.Security.Claims
 @model RVAS_BookExchange.Models.Conversation
-
-<h2>Razgovor za knjigu: @Model.BookTitle</h2>
-
-<a asp-controller="Messages" asp-action="Index">Nazad na poruke</a>
-
-<hr />
-
-@if (Model.Messages == null || !Model.Messages.Any())
-{
-    <p>Još uvek nema poruka u ovom razgovoru.</p>
+@{
+    ViewData["Title"] = "Razgovor";
+    var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
-else
-{
-    <div>
-        @foreach (var message in Model.Messages.OrderBy(m => m.SentAt))
+
+<div class="container py-4" style="max-width:700px;">
+    <a asp-controller="Messages" asp-action="Index" class="btn-raf-outline mb-4 d-inline-block">&#8249; Nazad na poruke</a>
+
+    <h2 style="font-family:'Playfair Display',serif; margin-bottom:24px;">@Model.BookTitle</h2>
+
+    <div class="chat-container mb-4">
+        @if (Model.Messages == null || !Model.Messages.Any())
         {
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var isMyMessage = message.SenderUserId == currentUserId;
-
-            <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-                <p>
-                    <strong>@(isMyMessage ? "Vi" : message.SenderEmail)</strong>
-                    <span>
-                        @message.SentAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
-                    </span>
-                </p>
-
-                <p>@message.Text</p>
-            </div>
+            <p style="opacity:0.7; text-align:center;">Još nema poruka. Započnite razgovor!</p>
+        }
+        else
+        {
+            @foreach (var message in Model.Messages.OrderBy(m => m.SentAt))
+            {
+                var isMyMessage = message.SenderUserId == currentUserId;
+                <div class="@(isMyMessage ? "chat-bubble-mine" : "chat-bubble-theirs")">
+                    <div>@message.Text</div>
+                    <div style="font-size:0.75rem; opacity:0.65; margin-top:4px;">
+                        @(isMyMessage ? "Vi" : message.SenderEmail) · @message.SentAt.ToLocalTime().ToString("HH:mm")
+                    </div>
+                </div>
+            }
         }
     </div>
-}
 
-<hr />
-
-<h3>Pošalji novu poruku</h3>
-
-<form asp-controller="Messages" asp-action="Send" method="post">
-    @Html.AntiForgeryToken()
-
-    <input type="hidden" name="conversationId" value="@Model.Id" />
-
-    <div>
-        <label>Poruka</label>
-        <textarea name="text" required></textarea>
-    </div>
-
-    <button type="submit">Pošalji</button>
-</form>
+    <form method="post" asp-controller="Messages" asp-action="Send">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="conversationId" value="@Model.Id" />
+        <div class="d-flex gap-2">
+            <input type="text" name="text" class="form-control-raf" placeholder="Napišite poruku..." style="flex:1;" required />
+            <button type="submit" class="btn-raf px-4">Pošalji</button>
+        </div>
+    </form>
+</div>

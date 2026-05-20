@@ -52,7 +52,7 @@
                             <td>@knjiga.Condition</td>
                             <td>
                                 <div class="d-flex gap-2">
-                                    <a asp-controller="Books" asp-action="Edit" asp-route-id="@knjiga.Id" class="btn-raf" style="font-size:0.8rem; padding:6px 14px;">Izmijeni</a>
+                                    <a asp-controller="Books" asp-action="Edit" asp-route-id="@knjiga.Id" class="btn-raf" style="font-size:0.8rem; padding:6px 14px;">Izmeni</a>
                                     <form method="post" asp-controller="Books" asp-action="Delete" style="margin:0;">
                                         @Html.AntiForgeryToken()
                                         <input type="hidden" name="id" value="@knjiga.Id" />

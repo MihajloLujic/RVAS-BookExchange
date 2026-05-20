@@ -1,44 +1,37 @@
 ﻿@model List<RVAS_BookExchange.Models.Conversation>
-
-<h2>Poruke</h2>
-
-@if (Model == null || !Model.Any())
-{
-    <p>Trenutno nemate nijedan razgovor.</p>
+@{
+    ViewData["Title"] = "Poruke";
 }
-else
-{
-    <div>
-        @foreach (var conversation in Model)
-        {
-            <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 15px;">
-                <h3>Razgovor za knjigu: @conversation.BookTitle</h3>
 
-                <p>
-                    <strong>Broj poruka:</strong> @conversation.Messages.Count
-                </p>
+<div class="container py-4">
+    <h2 style="font-family:'Playfair Display',serif; margin-bottom:24px;">Poruke</h2>
 
-                <p>
-                    <strong>Poslednja aktivnost:</strong> @conversation.UpdatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
-                </p>
-
-                @if (conversation.Messages.Any())
-                {
-                    var lastMessage = conversation.Messages.OrderByDescending(m => m.SentAt).First();
-
-                    <p>
-                        <strong>Poslednja poruka:</strong>
-                        <br />
-                        @lastMessage.Text
-                    </p>
-                }
-
-                <a asp-controller="Messages" asp-action="Thread" asp-route-id="@conversation.Id">
-                    Otvori razgovor
+    @if (Model == null || !Model.Any())
+    {
+        <p style="opacity:0.7;">Trenutno nemate nijedan razgovor.</p>
+    }
+    else
+    {
+        <div class="d-flex flex-column gap-3" style="max-width:700px;">
+            @foreach (var conversation in Model)
+            {
+                <a asp-controller="Messages" asp-action="Thread" asp-route-id="@conversation.Id"
+                   style="background-color:var(--bg-input); border-radius:16px; padding:20px; text-decoration:none; color:var(--text-dark); display:block;">
+                    <div style="font-weight:700; font-size:0.95rem;">@conversation.BookTitle</div>
+                    <div style="font-size:0.82rem; opacity:0.7; margin-top:4px;">
+                        Broj poruka: @conversation.Messages.Count · @conversation.UpdatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                    </div>
+                    @if (conversation.Messages.Any())
+                    {
+                        var lastMessage = conversation.Messages.OrderByDescending(m => m.SentAt).First();
+                        <div style="font-size:0.85rem; margin-top:8px; opacity:0.8;">@lastMessage.Text</div>
+                    }
                 </a>
-            </div>
-        }
-    </div>
-}
+            }
+        </div>
+    }
 
-<a asp-controller="Books" asp-action="Index">Nazad na dostupne knjige</a>
+    <div class="mt-4">
+        <a asp-controller="Books" asp-action="Index" class="btn-raf-outline">Nazad na knjige</a>
+    </div>
+</div>
