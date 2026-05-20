@@ -26,9 +26,18 @@
                 <form asp-controller="Requests" asp-action="Create" method="post" class="mt-3">
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="bookId" value="@Model.Id" />
-                    <input type="hidden" name="requestType" value="Pozajmica" />
+                    <div class="d-flex gap-2 mb-2">
+                        <label style="flex:1; background-color:var(--bg-input); border-radius:30px; padding:12px 20px; display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.9rem; font-weight:700;">
+                            <input type="radio" name="requestType" value="Pozajmica" checked style="accent-color:var(--btn-primary); width:16px; height:16px;" />
+                            Pozajmica
+                        </label>
+                        <label style="flex:1; background-color:var(--bg-input); border-radius:30px; padding:12px 20px; display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.9rem; font-weight:700;">
+                            <input type="radio" name="requestType" value="Kupovina" style="accent-color:var(--btn-primary); width:16px; height:16px;" />
+                            Kupovina
+                        </label>
+                    </div>
                     <button type="submit" style="width:100%; background-color:var(--bg-input); border:none; border-radius:30px; padding:14px 24px; font-weight:700; font-size:0.95rem; cursor:pointer;">
-                        Pozajmi / razmeni knjigu
+                        Pošalji zahtev
                     </button>
                 </form>
 
